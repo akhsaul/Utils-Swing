@@ -15,7 +15,7 @@ public class UtilTest {
             for (Theme value : Theme.values()) {
                 for (Theme.Mode mode : Theme.Mode.values()) {
                     Thread.sleep(3000);
-                    Util.changeTheme(value, frame, mode);
+                    SwingUtil.changeTheme(value, frame, mode);
                 }
             }
         }catch (Throwable e){

@@ -1,5 +1,11 @@
 package me.akhsaul.swing
 
+import com.formdev.flatlaf.extras.FlatAnimatedLafChange
+import com.formdev.flatlaf.extras.FlatInspector
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector
+import com.kitfox.svg.app.SVGViewer
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import me.akhsaul.common.exception.DeprecatedException
 import me.akhsaul.common.logger
 import me.akhsaul.common.tools.Sys
@@ -7,6 +13,7 @@ import me.akhsaul.swing.Window.Companion.DEFAULT_ICON
 import me.akhsaul.swing.Window.Companion.DEFAULT_LOCATION
 import me.akhsaul.swing.Window.Companion.DEFAULT_SIZE
 import me.akhsaul.swing.Window.Companion.DISPOSE
+import me.akhsaul.swing.Window.Companion.MAX_SIZE
 import java.awt.Frame
 import java.awt.Image
 import java.awt.event.WindowAdapter
@@ -44,7 +51,9 @@ open class KFrame @JvmOverloads constructor(
         LOG.info("Initialize $this with default setting")
         defaultCloseOperation = DISPOSE
         location = DEFAULT_LOCATION
-        size = DEFAULT_SIZE
+        minimumSize = DEFAULT_SIZE
+        preferredSize = DEFAULT_SIZE
+        maximumSize = MAX_SIZE
         isResizable = false
         setIcons(DEFAULT_ICON)
         changeTheme(theme, mode)

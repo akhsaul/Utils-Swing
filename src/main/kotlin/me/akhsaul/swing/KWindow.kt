@@ -1,14 +1,13 @@
 package me.akhsaul.swing
 
-import me.akhsaul.common.exception.DeprecatedException
-import me.akhsaul.common.logger
-import me.akhsaul.common.tools.Sys
 import java.awt.*
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
-import java.awt.event.WindowListener
 import java.awt.image.BufferedImage
-import javax.swing.*
+import java.io.File
+import java.nio.file.Path
+import javax.swing.JFrame
+import javax.swing.LookAndFeel
+import javax.swing.UIManager
+import kotlin.io.path.appendLines
 
 interface Window {
     companion object {
@@ -25,13 +24,16 @@ interface Window {
         val NOTHING = JFrame.DO_NOTHING_ON_CLOSE
 
         @JvmField
-        val DEFAULT_ICON: List<Image> = listOf(getImage("k_icon.png"))
+        val DEFAULT_ICON: List<Image> = listOf(getImage("k_icon_64x64.png"))
 
         @JvmField
         val EMPTY_ICON = listOf(BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE))
 
         @JvmField
         val DEFAULT_SIZE = Dimension(250, 250)
+
+        @JvmField
+        val MAX_SIZE = Toolkit.getDefaultToolkit().screenSize
 
         @JvmField
         val DEFAULT_LOCATION: Point = run {

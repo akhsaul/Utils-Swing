@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import me.akhsaul.common.*
 import me.akhsaul.common.tools.Sys
-import org.apache.logging.log4j.LogManager
 import org.slf4j.LoggerFactory
 import java.awt.*
 import java.awt.Window
@@ -82,6 +81,9 @@ fun changeTheme(theme: Theme, frame: Window, mode: Theme.Mode = Theme.Mode.LIGHT
     return changeTheme(selected, frame)
 }
 
+/**
+ * Update Component Tree in [component]
+ * */
 fun updateTreeUI(component: Component) {
     if (component is JComponent) {
         component.updateUI()
@@ -98,13 +100,41 @@ fun updateTreeUI(component: Component) {
     }?.forEach {
         updateTreeUI(it)
     }
-    updateUI(component)
+    update(component)
 }
 
-fun updateUI(component: Component) {
+/**
+ * Only updated the given [component], does not update sub component
+ * @see updateTreeUI
+ * */
+fun update(component: Component) {
     component.invalidate()
     component.validate()
     component.repaint()
+}
+
+/**
+ * Update all [java.awt.Window] without waiting
+ * @see invokeWait
+ * */
+fun updateUI() {
+    invokeWait {
+        Window.getWindows().forEach {
+            updateTreeUI(it)
+        }
+    }
+}
+
+/**
+ * Update all [java.awt.Window]
+ * @see invokeLater
+ * */
+fun updateUILater() {
+    invokeLater {
+        Window.getWindows().forEach {
+            updateTreeUI(it)
+        }
+    }
 }
 
 fun makeTrayIcon() {
@@ -120,7 +150,7 @@ object Intent {
      * */
     @JvmOverloads
     fun next(from: Frame, to: Frame, id: Int = this.hashCode()) {
-        if (history.containsKey(id)){
+        if (history.containsKey(id)) {
             history.getValue(id).addNonDuplicate(from).addNonDuplicate(to)
         } else {
             history[id] = mutableListOf(from, to)
@@ -136,13 +166,13 @@ object Intent {
      * @param id identification for context movement
      * */
     @JvmOverloads
-    fun prev(from: Frame, id: Int = this.hashCode()){
-        if (history.containsKey(id)){
+    fun prev(from: Frame, id: Int = this.hashCode()) {
+        if (history.containsKey(id)) {
             val list = history.getValue(id)
-            if (list.isNotEmpty()){
+            if (list.isNotEmpty()) {
                 if (list.last() == from) {
                     val to = list.getOrNull(list.lastIndex - 1)
-                    if (to != null){
+                    if (to != null) {
                         to.location = from.location
                         from.dispose()
                         to.isVisible = true
